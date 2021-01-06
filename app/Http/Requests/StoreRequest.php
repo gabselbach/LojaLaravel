@@ -24,10 +24,21 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'         => 'required',
-            'description'  => 'required|min:10',
-            'phone'        => 'required',
-            'mobile_phone' => 'required'
+            'name' => 'required',
+            'description' => 'required|min:10',
+            'phone' => 'required',
+            'mobile_phone' => 'required',
+            'logo' => 'image'
         ];
     }
+
+        public function messages()
+    {
+        return [
+            'required' => 'Este campo :attribute é obrigatório',
+            'min' => 'Campo deve ter no mínimo :min caracteres',
+            'image'    => 'Arquivo não é uma imagem válida!'
+        ];
+    }
+
 }

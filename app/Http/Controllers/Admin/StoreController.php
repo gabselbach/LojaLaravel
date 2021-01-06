@@ -4,19 +4,32 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\UploadTrait;
+use App\Http\Requests\StoreRequest;
+use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
+    use UploadTrait;
     /**
      * Display a listing of the resource.
      *
      * @return \App\Store[]|\Illuminate\Database\Eloquent\Collection
      */
+
+    public function __construct()
+    {
+       $this->middleware('user.has.store')->only(['create','store']);
+    }
+
+
     public function index()
     {
-        $stores = \App\Store::paginate(5);
+        $store = auth()->user()->store;
+            //\App\Store::paginate(5);
 
-        return view('admin.stores.index',compact('stores'));
+
+        return view('admin.stores.index',compact('store'));
 
     }
 
@@ -27,6 +40,7 @@ class StoreController extends Controller
      */
     public function create()
     {
+
         $users = \App\User::all(['id','name']);
         return view('admin.stores.create',compact('users'));
     }
@@ -37,12 +51,16 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $user = auth()->user();
         $data = $request->all();
 
         //$user = \App\User::find($data['user']);
+
+        if($request->hasFile('logo')){
+            $data['logo'] = $this->imageUpload($request->file('logo'));
+        }
         $store = $user->store()->create($data);
 
         flash('Loja cadastrada com sucesso')->success();
@@ -79,11 +97,20 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, $id)
     {
         $data = $request->all();
 
         $store = \App\Store::find($id);
+
+        if($request->hasFile('logo')){
+            if(Storage::disk('public')->exists($store->logo)){
+                Storage::disk('public')->delete($store->logo);
+            }
+
+            $data['logo'] = $this->imageUpload($request->file('logo'));
+        }
+
         $store->update($data);
 
         flash('Loja atualizada com sucesso')->success();

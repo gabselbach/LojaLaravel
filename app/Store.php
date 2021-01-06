@@ -1,13 +1,15 @@
 <?php
 
 namespace App;
-
+use App\Notifications\StoreReceiveNewOrder;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Slug;
 
 class Store extends Model
 {
+    use Slug;
+    protected $fillable = ['name', 'description', 'phone', 'mobile_phone', 'slug','logo'];
 
-    protected $fillable = ['name', 'description', 'phone', 'mobile_phone', 'slug'];
 
     public function user()
     {
@@ -21,8 +23,8 @@ class Store extends Model
 
     public function orders()
     {
-        return 1;
-        //return $this->belongsToMany(UserOrder::class, 'order_store', null, 'order_id');
+
+        return $this->belongsToMany(UserOrder::class,'order_store','store_id','order_id');
     }
 
     public function notifyStoreOwners(array $storesId = [])

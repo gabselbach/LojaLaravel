@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role'
     ];
 
     /**
@@ -43,13 +43,13 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return 1;
-      //  return $this->hasMany(UserOrder::class);
+
+       return $this->hasMany(UserOrder::class);
     }
 
     public function routeNotificationForNexmo($notification)
     {
-        $storeMobilePhoneNumber = trim(str_replace(['(', ')', ' ', '-'], '', $this->store->mobile_phone));
-        return '55' . $storeMobilePhoneNumber;
+        #$storeMobilePhoneNumber = trim(str_replace(['(', ')', ' ', '-'], '', $this->store->mobile_phone));
+        return '5553984753016'; #.$storeMobilePhoneNumber;
     }
 }

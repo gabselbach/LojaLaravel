@@ -49,6 +49,22 @@
             </div>
             @enderror
         </div>
+
+
+        <div class="form-group">
+            <p>
+                <img src="{{asset('storage/' . $store->logo)}}" alt="">
+            </p>
+
+            <label>Foto da logo</label>
+            <input type="file" name="logo" class="form-control  @error('logo') is-invalid @enderror">
+            @error('logo')
+            <div class="invalid-feedback">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
         <div>
             <button type="submit" class="btn btn-lg btn-success">Atualizar Loja</button>
         </div>

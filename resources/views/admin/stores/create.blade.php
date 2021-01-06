@@ -47,17 +47,29 @@
         </div>
         @enderror
     </div>
+
+
     <div class="form-group">
-        <label>Slug</label>
-        <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror" >
-        @error('slug')
+        <label>Foto da logo</label>
+        <input type="file" name="logo" class="form-control  @error('logo') is-invalid @enderror">
+
+        @error('logo')
         <div class="invalid-feedback">
             {{$message}}
         </div>
         @enderror
     </div>
+
     <div>
         <button type="submit" class="btn btn-lg btn-success">Criar Loja</button>
     </div>
 </form>
+@endsection
+@section('scripts')
+    <script>
+        let imPhone = new Inputmask('(99) 9999-9999');
+        imPhone.mask(document.getElementById('phone'));
+        let imMobilePhone = new Inputmask('(99) 99999-9999');
+        imMobilePhone.mask(document.getElementById('mobile_phone'));
+    </script>
 @endsection
